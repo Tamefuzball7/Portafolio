@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Portafolio - CRUD Flask</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="assets/css/whap.css">
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Portafolio</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+				<nav id="menu">
+					<div class="inner">
+						<h2>Menu</h2>
+						<ul class="links">
+							<li><a href="/index.html">Inicio</a></li>
+							<li><a href="/certificaciones.html">Certificados</a></li>
+							<li><a href="/Vacunacovid.html">Vacuna contra Covid</a></li>
+						</ul>
+						<a href="#" class="close">Close</a>
+					</div>
+				</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Crud Flask</h2>
+								<p>Proyecto flask basico</p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+										<h3 class="major">Crud Flask</h3>
+										<p>Esta aplicacion web es un <b>Control de empleados</b> el cual puede realizar en el registro de un nuevo empleado ,
+										como se puede ver en la siguiente captura</p> 
+										<h4><p><a class="inner" href="images/Registroempleado.jpg"><span><img height="500px" src="images/Registroempleado.jpg" alt="" /></span></a>
+										</p>Agregar Foto</h4>
+										<p> En la siguiente captura se ve como se puede agregar la foto del empleado la cual es almacenada en la base de datos MariaDB
+											</p>
+											<p><a href="/images/Registroempleadofoto.jpg"><span><img height="500px" src="images/Registroempleadofoto.jpg" alt="" /></span></a>.</p>
+										<h4>Registro Exitoso</h4>	
+											<p>El regitro del empleado se realizo de forma exitosa como se puede ver en la captura. </p>
+											<a href="/images/Registroempleadoexitoso.jpg"><span><img height="500px" src="images//Registroempleadoexitoso.jpg" alt="" /></span></a>
+											<br>
+											<br>
+										<h4>Base de datos</h4>
+										<p>En la base de datos se puede ver como la imagen es agregada a la base de datos con la fecha en la que es creada más el nombre para que no se remplazen  </p>
+										<a href="/images/Base de datos crud.jpg"><span><img height="500px" src="images/Base de datos crud.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<h4>Actualizacion Empleado</h4>
+										<p>En esta caputara realizaremos una actualizacion del nombre de jhon y su foto. 
+										</p>
+										<a href="/images/Update empleado.jpg"><span><img height="500px" src="images/Update empleado.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<h4>Actualizacion Exitosa</h4>
+										<p>En esta caputara realizaremos con exito la actualizacion de la foto con el nombre de Jhon. 
+										</p>
+										<a href="/images/Update empleado exitoso.jpg"><span><img height="500px" src="images/Update empleado exitoso.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<h4>Delete</h4>
+										<p>En este paso borraremos a jhon y 3 empleados más. 
+										</p>
+										<a href="/images/Deletejhon.jpg"><span><img height="500px" src="images/Deletejhon.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<p>En este paso borraremos a Mariana . 
+										</p>
+										<a href="/images/Deletemariana.jpg"><span><img height="500px" src="images/Deletemariana.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<p>En este paso borraremos a Sebastian . 
+										</p>
+										<a href="/images/Deletesebastian.jpg"><span><img height="500px" src="images/Deletesebastian.jpg" alt="" /></span></a>
+										<p>Acotinuacion les dejo el codigo de flask y el motor de plantillas jinja2</p>
+										<br>
+										<br>
+										<h4>Directo</h4>
+										<p>En esta captura se evidencia un video en directo con reconocimiento de rostro. 
+										</p>
+										<a href="/images/directo.jpg"><span><img height="500px" src="images/directo.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<h4>Codigo Flask</h4>
+										<pre><code>from flask import Flask, redirect, render_template,request, url_for, flash
+from flask import Flask, redirect, render_template, send_from_directory,request,Response,url_for
+import mysql.connector
+from datetime import datetime
+import os
+import cv2
+
+
+app = Flask(__name__)
+
+conexiondb=mysql.connector.connect(
+host="localhost",
+port=3306,
+user="root",
+password="",
+db="python"
+)
+
+CARPETA=os.path.join("uploads")
+app.config["CARPETA"]=CARPETA
+
+app.secret_key="16ee56b3ef831cf2a1ae649dd925a067"
+
+def livestream():
+    video=cv2.VideoCapture(0 , cv2.CAP_DSHOW)
+    face_detector= cv2.CascadeClassifier(cv2.data.haarcascades + 
+    "haarcascade_frontalface_default.xml")
+    while True:
+        ret, frame = video.read()
+        frame=cv2.flip(frame, 1)
+        if ret:
+            gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces=face_detector.detectMultiScale(gray, 1.3 , 5)
+
+            for (x, y , w, h)in faces:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0) , 1)
+            (flag, encodedImage)=cv2.imencode(".jpg",frame)
+            if not flag:
+                continue
+            yield(b"--frame\r\n" b"Contect-Type:image/jpeg r\n\r\n" + bytearray(encodedImage)+b"\r\n") 
+
+@app.route("/stream") #directo
+def stream():
+    return Response(livestream(),
+    mimetype="multipart/x-mixed-replace; boundary=frame")
+
+@app.route('/directo')
+def directo():
+    return render_template ("/directo.html")
+
+@app.route("/")
+def index():
+    return render_template("index.html") 
+
+@app.route('/create')
+def create():
+    return render_template("create.html")
+
+
+@app.route("/form" , methods=["POST" ] )
+def form():
+    nombre=request.form["txtnombre"]
+    email=request.form["txtemail"]
+    foto=request.files["txtfoto"]
+
+    if request.method == "POST":
+        conexiondb
+        now=datetime.now()
+        tiempo=now.strftime("%Y%H%M%S") #formato de fecha
+    if foto.filename != "": # agregar archivo
+        NuevoNombre=tiempo+foto.filename
+        foto.save("uploads/"+NuevoNombre) #concatenar nuevo nombre 
+        if conexiondb.is_connected():
+            foto.filename=NuevoNombre
+            print("Conexion Exitosa")
+            infoserver=conexiondb.get_server_info()
+            print("Informacion del servidor: ", infoserver)
+            cur=conexiondb.cursor()
+            cur.execute("INSERT INTO formulario (nombre, email, foto ) VALUES (%s, %s, %s)", (nombre,email,foto.filename))
+            conexiondb.commit()
+            return redirect("/create")
+
+@app.route('/buscar') #consulta de informacion
+def Buscar():
+    cur=conexiondb.cursor()
+    cur.execute("SELECT * FROM formulario")
+    formulario=cur.fetchall()
+    return render_template ("edit.html", formulario=formulario)
+
+@app.route('/uploads/< foto >') #acceso carpeta uploads
+def uploads(foto):
+    return send_from_directory(app.config["CARPETA"],foto)
+
+
+@app.route("/borrar/< int:id >")
+def Borrar(id):
+    cur=conexiondb.cursor()
+    cur.execute("SELECT foto FROM formulario WHERE id={0}".format(id))
+    fila=cur.fetchall()
+    os.remove(os.path.join(app.config["CARPETA"],fila[0][0]))
+    cur.execute("DELETE FROM formulario WHERE id ={0}".format(id)) #Borrar con la funcion .format(parametro)
+    conexiondb.commit()    
+    return redirect("/buscar")
+
+@app.route("/edit/< int:id >")
+def edit(id):
+    cur=conexiondb.cursor()
+    cur.execute("SELECT * FROM formulario WHERE id = {0}".format(id))
+    formulario=cur.fetchall() #recupera la informacion
+    conexiondb.commit()
+    return render_template ("editar.html",formulario=formulario)
+
+@app.route('/update', methods=["POST"] ) #envio de edicion datos
+def update():
+    Nombre=request.form["txtnombre"]
+    Email=request.form["txtemail"]
+    foto=request.files["txtfoto"]
+    id=request.form["txtid"]
+
+    cur=conexiondb.cursor()
+
+    
+
+    if foto.filename != "": # agregar archivo
+        now=datetime.now()
+        tiempo=now.strftime("%Y%H%M%S") #formato de fecha
+        NuevoNombre=tiempo+foto.filename
+        foto.save("uploads/"+NuevoNombre) #concatenar nuevo nombre
+        cur.execute("SELECT foto FROM formulario WHERE id={0}".format(id))
+        fila=cur.fetchall()
+        os.remove(os.path.join(app.config["CARPETA"],fila[0][0])) # actualizar archivos de uploads
+        cur.execute("UPDATE formulario SET foto=%s WHERE id=%s",(NuevoNombre,id))
+        conexiondb.commit()
+
+    cur.execute("UPDATE formulario SET nombre=%s,email=%s WHERE id=%s;",(Nombre,Email,id))
+    conexiondb.commit()
+    return redirect("/buscar")
+
+
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000, debug=True)
+</code>
+									</section>
+
+
+				<!-- Footer -->
+				<section id="footer">
+					<div class="inner">
+						<h2 class="major">Contactame</h2>
+						<p>Si estas interesado en contactarme, puedes hacerlo por medio de este formulario, por mi correo elsctronico personal o mis redes sociales Whatsap, Facebook, Instagram y Linkedin.</p>
+						<form class="kwes-form" method="post" action="https://kwesforms.com/api/foreign/forms/l26z61zU4AeMquxBxSEW">
+							<div class="fields">
+								<div class="field">
+									<label for="name">Nombre</label>
+									<input type="text" name="name" id="name" />
+								</div>
+								<div class="field">
+									<label for="email">Correo Electronico</label>
+									<input type="email" name="email" id="email" />
+								</div>
+								<div class="field">
+									<label for="message">Mensaje</label>
+									<textarea name="message" id="message" rows="4"></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Enviar" /></li>
+							</ul>
+						</form>
+						<ul class="contact">
+							<li class="icon solid fa-home">
+								Colombia <br />
+								Bogota.DC <br />
+								Mandalay - Kennedy
+							</li>
+							<li class="icon solid fa-phone"><a href="tel:3103226233" >(+57) 310 3226233</a></li>
+							<li class="icon solid fa-envelope"><a target="blank" href="mailto:sebastianduquereyes@gmail.com">sebastianduquereyes@gmail.com</a></li>
+							<li class="icon brands fa-facebook-f"><a target="blank"  href="https://www.facebook.com/Sebastian-Duque-107118428629012">Sebastian Duque</a></li>
+							<li class="icon brands fa-github"><a target="blank" href="https://github.com/Tamefuzball7">GitHUb</a></li>
+							<li class="icon brands fa-instagram"><a target="" href="https://www.instagram.com/tamefuzzball7/">Tamefuzzball7</a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy;2022 Template by.</li><li> <a target="blank" href="https://www.linkedin.com/in/sebastian-duque-reyes-2167bb219/">Sebastian Duque Reyes</a></li>
+						</ul>
+					</div>
+				</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="https://kwesforms.com/v2/kwes-script.js" defer></script>
+
+			<div class="container-boton">
+				<a href="https://wa.me/573103226233?text=Hola.%20Estoy%20interesado%20en%20tu%20portafolio" target="_blank" >
+					<img class="boton" src="images\icono.png" alt="">
+				</a>
+			</div>
+
+	</body>
+</html>

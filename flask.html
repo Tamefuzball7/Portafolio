@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Portafolio - Python Flask</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="assets/css/whap.css">
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Portafolio</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+				<nav id="menu">
+					<div class="inner">
+						<h2>Menu</h2>
+						<ul class="links">
+							<li><a href="/index.html">Inicio</a></li>
+							<li><a href="/certificaciones.html">Certificados</a></li>
+							<li><a href="/Vacunacovid.html">Vacuna contra Covid</a></li>
+						</ul>
+						<a href="#" class="close">Close</a>
+					</div>
+				</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Python-Flask</h2>
+								<p>Proyecto flask basico</p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<section>
+										<h3 class="major">Formulario</h3>
+										<p>Este <b>formulario</b> esta desarrollado con el frameWork flask de python , haciendo uso de las librerias virtualenv, mysql.connection, request, 
+											url_for ,  render_template, flash y jinja2. El <i>Back-End</i> funciona por medio de peticiones, El usuario al realizar una peticion por medio de la vista(Web)
+											esta es enviada al <b>Back-End</b> y el backend responde su peticion devolviendo a la <b>vista</b> una raspuesta.
+										Para la base de datos use MariaDB(SQL) con El SGBD (Sistema gestor de base de datos) Xampp</p> 
+										<h4><p><a class="inner" href="/images/Formulario.jpg"><span><img height="500px" src="images/Formulario.jpg" alt="" /></span></a></p>Creacion Base de la Datos</h4>
+										<p>Para la creacion de mi Base de Datos use una tabla ,y 4 campos en los cuales esta mi campo de id que es Auto incrementable , Nombre, Email, Motivo y Mensaje
+											que son de tipo varchar.</p>
+											<p><a href="/images/BD_XAMPP.jpg"><span><img height="500px" src="images/BD_XAMPP.jpg" alt="" /></span></a>.</p>
+										<h4>Funcion formulario</h4>	
+											<p>de esa forma funciona el formulario interactua con el Back-End , enviamos nuestra peticion con la libreria request. </p>
+											<a href="/images/Formulario_rellenando.jpg"><span><img height="500px" src="images/Formulario_rellenando.jpg" alt="" /></span></a>
+											<br>
+											<br>
+										<h4>Funcion Base de Datos</h4>
+										<p>En esta captura se puede observar que los datos se enviaron correctamente a la Base de Datos</p>
+										<a href="/images/DB_Dguardado.jpg"><span><img height="500px" src="images/DB_Dguardado.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<h4>Respuesta del servidor</h4>
+										<p>En esta caputara se evidencia la respuesta del servidor retornando un mensaje al usuario que dice "SU FORMULARIO SE HA ENVIADO"
+											en la parte posterio del formulario. 
+										</p>
+										<a href="/images/Formulario_ENVIADO.jpg"><span><img height="500px" src="images/Formulario_ENVIADO.jpg" alt="" /></span></a>
+										<br>
+										<br>
+										<p>Acotinuacion les dejo el codigo de flask </p>
+										<h4>Codigo Flask</h4>
+										<pre><code>from flask import Flask, redirect, render_template,request, url_for, flash
+import mysql.connector
+
+app=Flask(__name__)
+
+conexion=mysql.connector.connect(
+host="localhost",
+port=3306,
+user="root",
+password="",
+db="contactame"
+)
+
+app.secret_key="mysecretkey"
+
+@app.route("/")
+def inicio():
+    return render_template("index.html")
+
+@app.route("/add_formulario", methods=["POST"])
+def add_formulario():
+    Nombre=request.form["Nombre"]
+    Email=request.form["Email"]
+    Motivo=request.form["Motivo"]
+    Mensaje=request.form["Mensaje"]
+    if request.method == "POST": 
+        conexion
+    if conexion.is_connected():
+        print("Conexion exitosa")
+        infoserver=conexion.get_server_info()
+        print("Informaicon del server: ",infoserver)
+        cur=conexion.cursor()
+        cur.execute("INSERT INTO form (Nombre ,Email, Motivo, Mensaje ) VALUES (%s, %s, %s,%s)",(Nombre,Email,Motivo,Mensaje)) 
+        conexion.commit()
+		flash("SU FORMULARIO SE HA ENVIADO" )
+        return redirect(url_for("inicio")) 
+
+    
+
+
+
+
+if __name__ == "__main__":
+    app.run( debug=True , port="4000" ,host="0.0.0.0" )
+</code></pre>
+							
+							<h4>Codigo jinja2</h4>
+							<p></p>
+							<pre><code>{% with mensajes = get_flashed_messages() %}
+{% if mensajes %}
+{% for mensaje in mensajes %}
+	<p>{{mensaje}}</p>
+{% endfor %}
+{% endif %}
+{% endwith%}</code></pre>
+									</section>
+
+
+				<!-- Footer -->
+				<section id="footer">
+					<div class="inner">
+						<h2 class="major">Contactame</h2>
+						<p>Si estas interesado en contactarme, puedes hacerlo por medio de este formulario, por mi correo elsctronico personal o mis redes sociales Whatsap, Facebook, Instagram y Linkedin.</p>
+						<form class="kwes-form" method="post" action="https://kwesforms.com/api/foreign/forms/l26z61zU4AeMquxBxSEW">
+							<div class="fields">
+								<div class="field">
+									<label for="name">Nombre</label>
+									<input type="text" name="name" id="name" />
+								</div>
+								<div class="field">
+									<label for="email">Correo Electronico</label>
+									<input type="email" name="email" id="email" />
+								</div>
+								<div class="field">
+									<label for="message">Mensaje</label>
+									<textarea name="message" id="message" rows="4"></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Enviar" /></li>
+							</ul>
+						</form>
+						<ul class="contact">
+							<li class="icon solid fa-home">
+								Colombia <br />
+								Bogota.DC <br />
+								Mandalay - Kennedy
+							</li>
+							<li class="icon solid fa-phone"><a href="tel:3103226233" >(+57) 310 3226233</a></li>
+							<li class="icon solid fa-envelope"><a target="blank" href="mailto:sebastianduquereyes@gmail.com">sebastianduquereyes@gmail.com</a></li>
+							<li class="icon brands fa-facebook-f"><a target="blank"  href="https://www.facebook.com/Sebastian-Duque-107118428629012">Sebastian Duque</a></li>
+							<li class="icon brands fa-github"><a target="blank" href="https://github.com/Tamefuzball7">GitHUb</a></li>
+							<li class="icon brands fa-instagram"><a target="" href="https://www.instagram.com/tamefuzzball7/">Tamefuzzball7</a></li>
+						</ul>
+						<ul class="copyright">
+							<li>&copy;2022 Template by.</li><li> <a target="blank" href="https://www.linkedin.com/in/sebastian-duque-reyes-2167bb219/">Sebastian Duque Reyes</a></li>
+						</ul>
+					</div>
+				</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="https://kwesforms.com/v2/kwes-script.js" defer></script>
+
+			<div class="container-boton">
+				<a href="https://wa.me/573103226233?text=Hola.%20Estoy%20interesado%20en%20tu%20portafolio" target="_blank" >
+					<img class="boton" src="images\icono.png" alt="">
+				</a>
+			</div>
+
+	</body>
+</html>
